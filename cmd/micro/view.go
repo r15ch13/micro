@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -17,6 +18,7 @@ const (
 	vtDefault ViewType = iota
 	vtHelp
 	vtLog
+	vtRawEvents
 )
 
 // The View struct stores information about a view into a buffer.
@@ -440,6 +442,19 @@ func (v *View) MoveToMouseClick(x, y int) {
 
 // HandleEvent handles an event passed by the main loop
 func (v *View) HandleEvent(event tcell.Event) {
+	if v.Type == vtRawEvents {
+		if e, ok := event.(*tcell.EventKey); ok {
+			if e.Rune() == 'q' {
+				v.Quit(true)
+			}
+		}
+
+		v.Buf.Insert(v.Buf.End(), fmt.Sprintf("%q", event.Raw())+"\n")
+		v.Buf.Cursor.Loc = v.Buf.End()
+		v.Relocate()
+		return
+	}
+
 	// This bool determines whether the view is relocated at the end of the function
 	// By default it's true because most events should cause a relocate
 	relocate := true

@@ -30,25 +30,26 @@ var commandActions map[string]func([]string)
 
 func init() {
 	commandActions = map[string]func([]string){
-		"Set":       Set,
-		"SetLocal":  SetLocal,
-		"Show":      Show,
-		"Run":       Run,
-		"Bind":      Bind,
-		"Quit":      Quit,
-		"Save":      Save,
-		"Replace":   Replace,
-		"VSplit":    VSplit,
-		"HSplit":    HSplit,
-		"Tab":       NewTab,
-		"Help":      Help,
-		"Eval":      Eval,
-		"ToggleLog": ToggleLog,
-		"Plugin":    PluginCmd,
-		"Reload":    Reload,
-		"Cd":        Cd,
-		"Pwd":       Pwd,
-		"Open":      Open,
+		"Set":        Set,
+		"SetLocal":   SetLocal,
+		"Show":       Show,
+		"Run":        Run,
+		"Bind":       Bind,
+		"Quit":       Quit,
+		"Save":       Save,
+		"Replace":    Replace,
+		"VSplit":     VSplit,
+		"HSplit":     HSplit,
+		"Tab":        NewTab,
+		"Help":       Help,
+		"Eval":       Eval,
+		"ToggleLog":  ToggleLog,
+		"Plugin":     PluginCmd,
+		"Reload":     Reload,
+		"Cd":         Cd,
+		"Pwd":        Pwd,
+		"Open":       Open,
+		"ShowEvents": ShowEvents,
 	}
 }
 
@@ -82,25 +83,26 @@ func MakeCommand(name, function string, completions ...Completion) {
 // DefaultCommands returns a map containing micro's default commands
 func DefaultCommands() map[string]StrCommand {
 	return map[string]StrCommand{
-		"set":      {"Set", []Completion{OptionCompletion, NoCompletion}},
-		"setlocal": {"SetLocal", []Completion{OptionCompletion, NoCompletion}},
-		"show":     {"Show", []Completion{OptionCompletion, NoCompletion}},
-		"bind":     {"Bind", []Completion{NoCompletion}},
-		"run":      {"Run", []Completion{NoCompletion}},
-		"quit":     {"Quit", []Completion{NoCompletion}},
-		"save":     {"Save", []Completion{NoCompletion}},
-		"replace":  {"Replace", []Completion{NoCompletion}},
-		"vsplit":   {"VSplit", []Completion{FileCompletion, NoCompletion}},
-		"hsplit":   {"HSplit", []Completion{FileCompletion, NoCompletion}},
-		"tab":      {"Tab", []Completion{FileCompletion, NoCompletion}},
-		"help":     {"Help", []Completion{HelpCompletion, NoCompletion}},
-		"eval":     {"Eval", []Completion{NoCompletion}},
-		"log":      {"ToggleLog", []Completion{NoCompletion}},
-		"plugin":   {"Plugin", []Completion{PluginCmdCompletion, PluginNameCompletion}},
-		"reload":   {"Reload", []Completion{NoCompletion}},
-		"cd":       {"Cd", []Completion{FileCompletion}},
-		"pwd":      {"Pwd", []Completion{NoCompletion}},
-		"open":     {"Open", []Completion{FileCompletion}},
+		"set":        {"Set", []Completion{OptionCompletion, NoCompletion}},
+		"setlocal":   {"SetLocal", []Completion{OptionCompletion, NoCompletion}},
+		"show":       {"Show", []Completion{OptionCompletion, NoCompletion}},
+		"bind":       {"Bind", []Completion{NoCompletion}},
+		"run":        {"Run", []Completion{NoCompletion}},
+		"quit":       {"Quit", []Completion{NoCompletion}},
+		"save":       {"Save", []Completion{NoCompletion}},
+		"replace":    {"Replace", []Completion{NoCompletion}},
+		"vsplit":     {"VSplit", []Completion{FileCompletion, NoCompletion}},
+		"hsplit":     {"HSplit", []Completion{FileCompletion, NoCompletion}},
+		"tab":        {"Tab", []Completion{FileCompletion, NoCompletion}},
+		"help":       {"Help", []Completion{HelpCompletion, NoCompletion}},
+		"eval":       {"Eval", []Completion{NoCompletion}},
+		"log":        {"ToggleLog", []Completion{NoCompletion}},
+		"plugin":     {"Plugin", []Completion{PluginCmdCompletion, PluginNameCompletion}},
+		"reload":     {"Reload", []Completion{NoCompletion}},
+		"cd":         {"Cd", []Completion{FileCompletion}},
+		"pwd":        {"Pwd", []Completion{NoCompletion}},
+		"open":       {"Open", []Completion{FileCompletion}},
+		"showevents": {"ShowEvents", []Completion{NoCompletion}},
 	}
 }
 
@@ -187,6 +189,11 @@ func PluginCmd(args []string) {
 	} else {
 		messenger.Error("Not enough arguments")
 	}
+}
+
+func ShowEvents(args []string) {
+	CurView().VSplit(NewBufferFromString("", "Raw Events (press q to exit)"))
+	CurView().Type = vtRawEvents
 }
 
 func Cd(args []string) {
