@@ -11,13 +11,13 @@ import (
 	"time"
 
 	"github.com/go-errors/errors"
-	"layeh.com/gopher-luar"
 	"github.com/mattn/go-isatty"
 	"github.com/mitchellh/go-homedir"
 	"github.com/yuin/gopher-lua"
 	"github.com/zyedidia/clipboard"
 	"github.com/zyedidia/tcell"
 	"github.com/zyedidia/tcell/encoding"
+	"layeh.com/gopher-luar"
 )
 
 const (
@@ -201,6 +201,7 @@ func InitScreen() {
 // RedrawAll redraws everything -- all the views and the messenger
 func RedrawAll() {
 	messenger.Clear()
+	screen.Clear()
 	for _, v := range tabs[curTab].views {
 		v.Display()
 	}
